@@ -23,9 +23,22 @@ class Sql():
 
     def select_table(self, str_data):
         """查询表"""
-        self.cursor.execute(str_data)
+        sql = "select * from weather_id where id = %s"
+        self.cursor.execute(sql, [str_data])
         datelist = self.cursor.fetchall()
         return datelist
+
+    def updata_table(self, str_data, x, y, id):
+        """更新表"""
+        sql = "update weather_id set newtime = %s,x=%s,y=%s where id =%s"
+        self.cursor.execute(sql, [str_data, x, y, id])
+        self.conn.commit()
+
+    def inster_table(self, a, b, c, d):
+        """新增数据"""
+        sql = "INSERT into weather_id VALUES(%s,%s,%s,%s)"
+        self.cursor.execute(sql, [a, b, c, d])
+        self.conn.commit()
 
     def close(self):
         """退出查询"""
@@ -87,34 +100,49 @@ class Location():
 
     def __init__(self, xml_dict):
         """获取经纬度"""
+        self.xml_dict = xml_dict
         self.Lacation_w = xml_dict['xml']['Location_X']  # 获取维度
         self.Lacation_j = xml_dict['xml']['Location_Y']  # 获取精度
         self.Label = xml_dict['xml']["Label"]  # 获取地方
 
-    def re_weather(self):
+    def set_weather(self):
         """获取天气"""
-        re = requests.get(
-            url=fr"https://api.caiyunapp.com/v2.6/TAkhjf8d1nlSlspN/{self.Lacation_j},{self.Lacation_w}/realtime")
-        weather = {"CLEAR_DAY": "晴（白天）", "CLEAR_NIGHT": "晴（夜间）", "PARTLY_CLOUDY_DAY": "多云（白天）",
-                   "PARTLY_CLOUDY_NIGHT": "多云（夜间）",
-                   "CLOUDY": "阴",
-                   "LIGHT_HAZE": "轻度雾霾", "MODERATE_HAZE": "中度雾霾", "HEAVY_HAZE": "重度雾霾", "LIGHT_RAIN": "小雨",
-                   "MODERATE_RAIN": "中雨",
-                   "HEAVY_RAIN": "大雨", "STORM_RAIN": "暴雨", "FOG": "雾", "LIGHT_SNOW": "小雪", "MODERATE_SNOW": "中雪",
-                   "HEAVY_SNOW": "大雪", "STORM_SNOW": "暴雪", "DUST": "浮尘", "SAND": "沙尘", "WIND": "大风"}
-        re_js = re.json()  # 获取天气的JSON格式
         sq = Sql()  # 连接数据库
-        sql = "select id from weather_vx where id = {1}".format(self.xml_dict['xml']["FromUserName"])  # 进行查询
+        st_id = self.xml_dict['xml']["FromUserName"]
         dateti = datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # 获取当前时间
-        id_data = sq.select_table(sql)  # 获取用户信息
+        id_data = sq.select_table(st_id)  # 获取用户信息
         if id_data:
-            sql = "INSERT into weather_id VALUES({1},{2},{3},{4})".format()
-            sq.create_table()
+            sq.updata_table(dateti, str(self.Lacation_j), str(self.Lacation_w), st_id)
+            sq.close()
             return "您的位置已更新，您可以发送：天气  即可获取当前天气信息"
         else:
-
+            sq.inster_table(st_id, dateti, self.Lacation_j,
+                            self.Lacation_w)
+            sq.close()
             return "您的位置已记录，您可以发送：天气  即可获取当前天气信息"
-        text = "您所在地区为:{0},体感温度为:{1}度,风速{2}级,天气为:{3}".format(self.Label,
-                                                             re_js['result']['realtime']["apparent_temperature"],
-                                                             re_js['result']["realtime"]["wind"]["speed"],
-                                                             weather[re_js["result"]["realtime"]["skycon"]])
+
+
+def get_weather(xml_dict):
+    sq = Sql()  # 连接数据库
+    st_id = xml_dict['xml']["FromUserName"]
+    id_data = sq.select_table(st_id)  # 获取用户信息
+    if id_data:
+        Lacation_j = id_data[0][2]
+        Lacation_w = id_data[0][3]
+    else:
+        return "抱歉您需要先发一下位置才能获取"
+    re = requests.get(
+        url=fr"https://api.caiyunapp.com/v2.6/TAkhjf8d1nlSlspN/{Lacation_j},{Lacation_w}/realtime")
+    weather = {"CLEAR_DAY": "晴（白天）", "CLEAR_NIGHT": "晴（夜间）", "PARTLY_CLOUDY_DAY": "多云（白天）",
+               "PARTLY_CLOUDY_NIGHT": "多云（夜间）",
+               "CLOUDY": "阴",
+               "LIGHT_HAZE": "轻度雾霾", "MODERATE_HAZE": "中度雾霾", "HEAVY_HAZE": "重度雾霾", "LIGHT_RAIN": "小雨",
+               "MODERATE_RAIN": "中雨",
+               "HEAVY_RAIN": "大雨", "STORM_RAIN": "暴雨", "FOG": "雾", "LIGHT_SNOW": "小雪", "MODERATE_SNOW": "中雪",
+               "HEAVY_SNOW": "大雪", "STORM_SNOW": "暴雪", "DUST": "浮尘", "SAND": "沙尘", "WIND": "大风"}
+    re_js = re.json()  # 获取天气的JSON格式
+    text = "您所在地区体感温度为:{0}度,风速{1}级,天气为:{2}".format(
+        re_js['result']['realtime']["apparent_temperature"],
+        re_js['result']["realtime"]["wind"]["speed"],
+        weather[re_js["result"]["realtime"]["skycon"]])
+    return text

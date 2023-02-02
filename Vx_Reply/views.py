@@ -9,7 +9,7 @@ from django.http import HttpResponse
 # Create your views here.
 from django.views.decorators.csrf import csrf_exempt
 
-from Vx_Reply.Common.VxReplyNews import DefTime
+from Vx_Reply.Common.VxReplyNews import DefTime, Location, get_weather
 from Vx_Reply.Common.Vx_masid import Masid
 
 
@@ -51,28 +51,17 @@ def Reply(request):
         # 判断用户输入的类型
         if MassgeType == 'text' and xml_dict['xml']['Content']:
             # 如果为text则返回text
-            # 创建安全列表存储多进程数据
-            q = Queue()
-            # 获取数据
-            text = DefTime(q, xml_dict['xml']['Content'])
+            if xml_dict['xml']['Content'] == "天气":
+                text = get_weather(xml_dict)
+            else:
+                # 创建安全列表存储多进程数据
+                q = Queue()
+                # 获取数据
+                text = DefTime(q, xml_dict['xml']['Content'])
         elif MassgeType == "location":
             # 如果为位置消息则存储
-            Lacation_w = xml_dict['xml']['Location_X']  # 获取维度
-            Lacation_j = xml_dict['xml']['Location_Y']  # 获取精度
-            Label = xml_dict['xml']["Label"]
-            re = requests.get(
-                url=fr"https://api.caiyunapp.com/v2.6/TAkhjf8d1nlSlspN/{Lacation_j},{Lacation_w}/realtime")
-            re_js = re.json()
-            weather = {"CLEAR_DAY": "晴（白天）", "CLEAR_NIGHT": "晴（夜间）", "PARTLY_CLOUDY_DAY": "多云（白天）",
-                       "PARTLY_CLOUDY_NIGHT": "多云（夜间）",
-                       "CLOUDY": "阴",
-                       "LIGHT_HAZE": "轻度雾霾", "MODERATE_HAZE": "中度雾霾", "HEAVY_HAZE": "重度雾霾", "LIGHT_RAIN": "小雨",
-                       "MODERATE_RAIN": "中雨",
-                       "HEAVY_RAIN": "大雨", "STORM_RAIN": "暴雨", "FOG": "雾", "LIGHT_SNOW": "小雪", "MODERATE_SNOW": "中雪",
-                       "HEAVY_SNOW": "大雪", "STORM_SNOW": "暴雪", "DUST": "浮尘", "SAND": "沙尘", "WIND": "大风"}
-            text = "您所在地区为:{0},体感温度为:{1}度,风速{2}级,天气为:{3}".format(Label, re_js['result']['realtime']["apparent_temperature"],
-                                                               re_js['result']["realtime"]["wind"]["speed"],
-                                                               weather[re_js["result"]["realtime"]["skycon"]])
+            la = Location(xml_dict)
+            text = la.set_weather()
         else:
             text = "抱歉，我除了文字啥也不会！"
 
