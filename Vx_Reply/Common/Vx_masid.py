@@ -14,3 +14,4 @@ class Masid:
             Masid.msgid_dqu.append(self.msgid)
             return 0
 
+
