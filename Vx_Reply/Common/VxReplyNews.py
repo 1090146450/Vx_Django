@@ -70,13 +70,17 @@ def XiaoAi(q, strnews):
     """请求小爱同学接口"""
     params = {"type": "text", "msg": strnews}
     time1 = datetime.now()
-    re = requests.get(url="https://xiaoapi.cn/API/lt_xiaoai.php", params=params)
+    re = requests.get(url="https://v.api.aa1.cn/api/api-xiaoai/talk.php", params=params)
     try:
-        re_json = re.json()
-    except Exception:
+        re_text = re.text
+    except Exception as e:
         q.put("阿偶，小爱出问题了，请联系管理员109014645@qq.com")
+        raise e
+    if re_text and re_text != "\n":
+        q.put(re_text.replace("\n", ""))
+    else:
+        q.put("小爱也不会呢")
     print("所需时间为:", (datetime.now() - time1).seconds)
-    q.put(re_json["data"]['txt'])
 
 
 def DefTime(q, *args, **kwargs):

@@ -45,9 +45,6 @@ def Reply(request):
         if Masid(xml_dict["xml"]["MsgId"]).Query_id():
             print("超过5S回复失败！")
             return HttpResponse("")
-        # 判断如果有消息则进行调用接口回复，如果没有消息则回复 "我没听懂，请重新输入"
-        else:
-            text = "我没听懂，请重新输入"
         # 判断用户输入的类型
         if MassgeType == 'text' and xml_dict['xml']['Content']:
             # 如果为text则返回text
