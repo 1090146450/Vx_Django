@@ -64,7 +64,7 @@ def Reply(request):
 
         xml = f"""<xml>
                             <ToUserName><![CDATA[{openid}]]></ToUserName>
-                            <FromUserName><![CDATA[gh_3ef9e08d4393]]></FromUserName>
+                            <FromUserName><![CDATA[halihushaoa]]></FromUserName>
                             <CreateTime>{createTime}</CreateTime>
                             <MsgType><![CDATA[text]]></MsgType>
                             <Content><![CDATA[{text}]]></Content>

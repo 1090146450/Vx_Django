@@ -1,0 +1,55 @@
+*** Starting uWSGI 2.0.21 (64bit) on [Sat Feb 18 11:41:01 2023] ***
+compiled with version: 4.8.5 20150623 (Red Hat 4.8.5-44) on 18 February 2023 02:02:40
+os: Linux-3.10.0-1160.71.1.el7.x86_64 #1 SMP Tue Jun 28 15:37:28 UTC 2022
+nodename: VM-8-15-centos
+machine: x86_64
+clock source: unix
+pcre jit disabled
+detected number of CPU cores: 2
+current working directory: /home/an/Vx_Django
+writing pidfile to uwsgi.pid
+detected binary path: /home/an/python_vx/bin/uwsgi
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+chdir() to /home/an/Vx_Django
+your processes number limit is 7908
+your memory page size is 4096 bytes
+detected max file descriptor number: 100001
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to TCP address 127.0.0.1:8000 fd 3
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+Python version: 3.9.1 (default, Feb 17 2023, 13:53:38)  [GCC 4.8.5 20150623 (Red Hat 4.8.5-44)]
+Python main interpreter initialized at 0x1d0bbe0
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+python threads support enabled
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 416880 bytes (407 KB) for 8 cores
+*** Operational MODE: preforking+threaded ***
+WSGI app 0 (mountpoint='') ready in 0 seconds on interpreter 0x1d0bbe0 pid: 32290 (default app)
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI master process (pid: 32290)
+spawned uWSGI worker 1 (pid: 32291, cores: 2)
+spawned uWSGI worker 2 (pid: 32293, cores: 2)
+spawned uWSGI worker 3 (pid: 32294, cores: 2)
+spawned uWSGI worker 4 (pid: 32296, cores: 2)
+所需时间为: 0
+输入消息: 1 
+回复: 你刚说啥?
+回复成功
+[pid: 32293|app: 0|req: 1/1] 81.69.103.205 () {38 vars in 714 bytes} [Sat Feb 18 03:41:27 2023] POST /config/?signature=49327496943e9ee1ad14c60fa5e8ebcbb4867bb4&timestamp=1676691687&nonce=536760157&openid=ofgDn5g1Uaxy4MUnc5GLruRxvUDE => generated 412 bytes in 4186 msecs (HTTP/1.1 200) 6 headers in 191 bytes (1 switches on core 0)
+Not Found: /
+[pid: 32296|app: 0|req: 1/2] 106.117.7.147 () {30 vars in 313 bytes} [Sat Feb 18 03:43:09 2023] HEAD / => generated 2063 bytes in 175 msecs (HTTP/1.1 404) 6 headers in 215 bytes (1 switches on core 0)
+Not Found: /wp-login.php
+[pid: 32296|app: 0|req: 2/3] 35.193.197.89 () {34 vars in 470 bytes} [Sat Feb 18 03:44:21 2023] GET /wp-login.php => generated 2121 bytes in 4 msecs (HTTP/1.1 404) 6 headers in 215 bytes (1 switches on core 1)
+Not Found: /
+[pid: 32296|app: 0|req: 3/4] 193.32.162.159 () {44 vars in 766 bytes} [Sat Feb 18 03:48:08 2023] GET / => generated 2060 bytes in 4 msecs (HTTP/1.1 404) 6 headers in 215 bytes (1 switches on core 0)
+Not Found: /
+[pid: 32296|app: 0|req: 4/5] 135.148.195.12 () {38 vars in 691 bytes} [Sat Feb 18 03:49:22 2023] GET / => generated 2066 bytes in 3 msecs (HTTP/1.1 404) 6 headers in 215 bytes (1 switches on core 1)
+Not Found: /favicon.ico
+[pid: 32296|app: 0|req: 5/6] 135.148.195.16 () {36 vars in 532 bytes} [Sat Feb 18 03:49:36 2023] GET /favicon.ico => generated 2117 bytes in 4 msecs (HTTP/1.1 404) 6 headers in 215 bytes (1 switches on core 0)
