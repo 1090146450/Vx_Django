@@ -1,7 +1,10 @@
 # coding:utf-8
 import hashlib
 from multiprocessing import Queue
+<<<<<<< HEAD
 
+=======
+>>>>>>> 完善了报错以及打包最新版本python3.9.1
 import openai
 import requests
 import xmltodict
@@ -55,17 +58,27 @@ def Reply(request):
                 q = Queue()
                 # 获取数据
                 text = DefTime(q, xml_dict['xml']['Content'])
+<<<<<<< HEAD
+=======
+                print("输入消息:",xml_dict['xml']['Content'], "\n回复:", text)
+>>>>>>> 完善了报错以及打包最新版本python3.9.1
         elif MassgeType == "location":
             # 如果为位置消息则存储
             la = Location(xml_dict)
             text = la.set_weather()
         else:
             text = "抱歉，我除了文字啥也不会！"
+<<<<<<< HEAD
 
         print("输入消息:", "", "\n回复:", text)
         xml = f"""<xml>
                             <ToUserName><![CDATA[{openid}]]></ToUserName>
                             <FromUserName><![CDATA[gh_3ef9e08d4393]]></FromUserName>
+=======
+        xml = f"""<xml>
+                            <ToUserName><![CDATA[{openid}]]></ToUserName>
+                            <FromUserName><![CDATA[halihushaoa]]></FromUserName>
+>>>>>>> 完善了报错以及打包最新版本python3.9.1
                             <CreateTime>{createTime}</CreateTime>
                             <MsgType><![CDATA[text]]></MsgType>
                             <Content><![CDATA[{text}]]></Content>
